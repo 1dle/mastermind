@@ -1,5 +1,6 @@
 package hu.idkfa.mastermind.model
 
+import android.util.Log
 import kotlin.properties.Delegates
 
 class GameTable {
@@ -10,6 +11,7 @@ class GameTable {
     private val MAX_ROW = 8
     private val MAX_COL = 4
 
+    private val results = List(MAX_ROW){ RowResult() }
 
     private fun initList(){
         //fill table with background-color color circles

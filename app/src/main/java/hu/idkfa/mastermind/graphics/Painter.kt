@@ -2,19 +2,24 @@ package hu.idkfa.mastermind.graphics
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toBitmap
 import hu.idkfa.mastermind.Constants
 import hu.idkfa.mastermind.model.Kolor
 
 object Painter {
 
-    fun circle(size: Int = Constants.ITEMSIZE2, border: Boolean = false, color: Kolor = Kolor.BGCOLOR, text: String? = null): Bitmap{
+    fun circle(
+        size: Int = Constants.ITEMSIZE2,
+        border: Boolean = false,
+        color: Kolor = Kolor.BGCOLOR,
+        text: String? = null
+    ): Bitmap{
         val bg = Bitmap.createBitmap(size+10,size+10, Bitmap.Config.ARGB_8888 )
         val paint = Paint().apply {
             style = Paint.Style.FILL
             flags = Paint.ANTI_ALIAS_FLAG
             this.color = Color.parseColor(color.colorCode)
         }
-
         val canvas = Canvas(bg)
         val radius = size/2f
         canvas.drawCircle(size/2f+5,size/2f+5,radius,paint)
@@ -44,6 +49,11 @@ object Painter {
         val y = cy + r.height() / 2f - r.bottom
         this.drawText(text, x, y, paint)
     }
+    private fun Bitmap.addCenterText(paint: Paint, text: String, cx: Float, cy:Float): Bitmap = this.apply{
+        val canvas = Canvas(this)
+        canvas.centerText(paint, text, cx, cy)
+    }
+
 
 
 
