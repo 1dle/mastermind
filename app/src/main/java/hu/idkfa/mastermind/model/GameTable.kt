@@ -21,8 +21,7 @@ class GameTable {
     val toGuess =  List(MAX_COL){
         Random.nextInt(1, PinStore.size)
     }
-
-    private val results = List(MAX_ROW){ RowResult() }
+    val results = List(MAX_ROW){ RowResult() }
 
     private fun resetTable(){//set each element of table to null
         for(i in _table.indices){

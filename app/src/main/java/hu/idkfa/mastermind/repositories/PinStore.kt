@@ -22,12 +22,13 @@ object PinStore {
         //+1 because IDs should start from index 1, because 0 represents empty in gameTable isntead of NULL
         Pin(it+1,
             Painter.circle(
-                Constants.ITEMSIZE1,//size for rvChooser
+                Constants.ITEMSIZE_CHOOSER,//size for rvChooser
                 true,
                 /*
                 it+2 +2 because first two colors are background colors
                  */
-                enumValues<Kolor>().get(it+2)
+                enumValues<Kolor>().get(it+2),
+                margin = 5
                 //last parameter is the text
             ),
             //now we need circles with different sizes and without border

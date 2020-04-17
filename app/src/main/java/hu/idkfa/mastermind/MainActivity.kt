@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hu.idkfa.mastermind.adapter.FunctionMode
 import hu.idkfa.mastermind.adapter.PinHolderAdapter
+import hu.idkfa.mastermind.adapter.RowResultsAdapter
 import hu.idkfa.mastermind.model.GameTable
 import hu.idkfa.mastermind.repositories.PinStore
 import hu.idkfa.mastermind.viewmodel.GameViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener {
+class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener, RowResultsAdapter.OnResultClickListener {
 
     val viewModel = GameViewModel()
     lateinit var gameTable: GameTable
@@ -56,14 +57,17 @@ class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener {
                 orientation = RecyclerView.HORIZONTAL
             }
             adapter = PinHolderAdapter(
-                (1..PinStore.pins.size).toList(), //every pin by id
+                (1..PinStore.size).toList(), //every pin by id
                 this@MainActivity,
                 FunctionMode.CHOOSER
             )
 
         }
 
-
+        rvResult.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = RowResultsAdapter(gameTable.results, this@MainActivity)
+        }
 
     }
 
@@ -72,5 +76,9 @@ class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener {
         //the adapter is multifunctional so we need to check wich table we clicked
         //Toast.makeText(this,gameTable.asList().get(position).toString(), Toast.LENGTH_SHORT).show()
 
+    }
+
+    override fun onResultClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }
