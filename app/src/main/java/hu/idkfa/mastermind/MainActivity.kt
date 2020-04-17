@@ -1,9 +1,9 @@
 package hu.idkfa.mastermind
 
-import android.app.Activity
 import android.graphics.Point
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,12 +12,10 @@ import hu.idkfa.mastermind.adapter.PinHolderAdapter
 import hu.idkfa.mastermind.adapter.RowResultsAdapter
 import hu.idkfa.mastermind.model.GameTable
 import hu.idkfa.mastermind.repositories.PinStore
-import hu.idkfa.mastermind.viewmodel.GameViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener, RowResultsAdapter.OnResultClickListener {
+class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, RowResultsAdapter.OnResultClickListener {
 
-    val viewModel = GameViewModel()
     lateinit var gameTable: GameTable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,18 @@ class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener, RowResults
         val size = Point()
         var a = windowManager.defaultDisplay.getSize(size)
         Constants.inititemSizes(size.x, size.y)
+
         gameTable = GameTable()
+
+        rvTable.apply{
+            layoutManager = GridLayoutManager(applicationContext,4)
+            adapter = PinHolderAdapter(
+                gameTable.mainTable,
+                this@MainActivity,
+                FunctionMode.MAIN_TABLE
+            )
+        }
+
 
         rvGuess.apply{
             layoutManager = LinearLayoutManager(applicationContext).apply {
@@ -42,16 +51,6 @@ class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener, RowResults
                 FunctionMode.TOGUESS
             )
         }
-
-        rvTable.apply{
-            layoutManager = GridLayoutManager(applicationContext,4)
-            adapter = PinHolderAdapter(
-                gameTable.asList(),
-                this@MainActivity,
-                FunctionMode.MAIN_TABLE
-            )
-        }
-
         rvChooser.apply {
             layoutManager = LinearLayoutManager(applicationContext).apply {
                 orientation = RecyclerView.HORIZONTAL
@@ -75,7 +74,14 @@ class MainActivity : Activity(), PinHolderAdapter.OnPinClickListener, RowResults
         //delete selected item, only if in the current row and is not already empty
         //the adapter is multifunctional so we need to check wich table we clicked
         //Toast.makeText(this,gameTable.asList().get(position).toString(), Toast.LENGTH_SHORT).show()
+        if(mode == FunctionMode.CHOOSER){
+            //if i click on one of elements of chooser
+            //add that id to gametable
 
+            gameTable.add(position+1).also{
+                rvTable.adapter!!.notifyItemChanged(it)
+            }
+        }
     }
 
     override fun onResultClick(position: Int) {
