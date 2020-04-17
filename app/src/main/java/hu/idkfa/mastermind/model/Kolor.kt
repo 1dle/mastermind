@@ -1,13 +1,15 @@
 package hu.idkfa.mastermind.model
 
-enum class Kolor(value: Int) {
-    BGCOLOR(0xB54448),
-    BGDARKER(0x8C3538),
-    RED(0xff0000),
-    GREEN(0x00ff00),
-    BLUE(0x0000ff),
-    CYAN(0x00ffff),
-    PINK(0xff00ff),
-    YELLOW(0xffff00)
+import hu.idkfa.mastermind.R
+
+enum class Kolor(val colorCode: String) {
+    BGCOLOR("#B54448"),
+    BGDARKER("#8C3538"),
+    RED("#ff0000"),
+    GREEN("#00ff00"),
+    BLUE("#0000ff"),
+    CYAN("#00ffff"),
+    PINK("#ff00ff"),
+    YELLOW("#ffff00")
 
 }
