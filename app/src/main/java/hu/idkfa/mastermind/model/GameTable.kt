@@ -1,33 +1,32 @@
 package hu.idkfa.mastermind.model
 
-import android.util.Log
-import kotlin.properties.Delegates
+import hu.idkfa.mastermind.repositories.PinStore
 
 class GameTable {
 
-    private val _table = mutableListOf<Kolor>()
+    //current position of cursor(row, column)
     private var row = 0
     private var column = 0
     private val MAX_ROW = 8
     private val MAX_COL = 4
 
+    // _table stores IDs of pins
+    private val _table = MutableList<Int>(MAX_ROW * MAX_COL){
+        //PinStore.pins.get(it%(PinStore.pins.size)).id
+        0
+    }
+
     private val results = List(MAX_ROW){ RowResult() }
 
-    private fun initList(){
-        //fill table with background-color color circles
-        repeat(MAX_ROW * MAX_COL){ _table.add(Kolor.BGDARKER) }
+    private fun resetTable(){//set each element of table to null
+        for(i in _table.indices){
+            _table[i] = 0
+        }
     }
 
-    init{
-        initList();
-    }
-
-
-    fun asList() = _table
+    fun asList(): MutableList<Int> = _table
     fun reset(){
         row = 0
         column = 0
-        _table.clear()
-        initList()
     }
 }

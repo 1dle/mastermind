@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import hu.idkfa.mastermind.graphics.Painter
-import hu.idkfa.mastermind.model.Kolor
+import hu.idkfa.mastermind.repositories.PinStore
 import kotlinx.android.synthetic.main.item_chooser.view.*
 
 
-class GameTableAdapter(private var linearDataSet: List<Kolor>,
+class GameTableAdapter(private var linearDataSet: List<Int>,
                        private val onKolorClickListener: OnKolorClickListener):
     RecyclerView.Adapter<GameTableAdapter.MyViewHolder>()
 {
@@ -21,7 +20,7 @@ class GameTableAdapter(private var linearDataSet: List<Kolor>,
         }
     }
     interface OnKolorClickListener{
-        fun onKolorClick(position: Int)
+        fun onTablePinClick(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -35,10 +34,10 @@ class GameTableAdapter(private var linearDataSet: List<Kolor>,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.view.ivItem.setImageBitmap(
-            Painter.circle(text = "?")
+            PinStore.getTableIconById(linearDataSet.get(position))
         )
         holder.view.setOnClickListener{
-            onKolorClickListener.onKolorClick(position)
+            onKolorClickListener.onTablePinClick(position)
         }
     }
 }

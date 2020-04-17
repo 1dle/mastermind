@@ -1,5 +1,6 @@
 package hu.idkfa.mastermind.repositories
 
+import android.graphics.Bitmap
 import hu.idkfa.mastermind.Constants
 import hu.idkfa.mastermind.graphics.Painter
 import hu.idkfa.mastermind.model.Kolor
@@ -12,13 +13,20 @@ object PinStore {
     CYAN("#00ffff"),
     PINK("#ff00ff"),
     YELLOW("#ffff00")*/
+
+    val pinBackground : Bitmap = Painter.circle()
+
     //6pcs pins
     val pins = List(6){
-        Pin(it,
+        //+1 because IDs should start from index 1, because 0 represents empty in gameTable isntead of NULL
+        Pin(it+1,
             Painter.circle(
                 Constants.ITEMSIZE1,//size for rvChooser
                 true,
-                enumValues<Kolor>().get(it+2)//+2 because the first two values are background color
+                /*
+                it+2 +2 because first two colors are background colors
+                 */
+                enumValues<Kolor>().get(it+2)
                 //last parameter is the text
             ),
             //now we need circles with different sizes and without border
@@ -28,5 +36,6 @@ object PinStore {
         )
     }
     fun getChooserIconById(id: Int) = pins.find{ p -> p.id == id }!!.chooserImage
-    fun getTableIconById(id: Int) = pins.find { p -> p.id == id }!!.tableImage
+    //if not found element with given id, that means the given id is 0 wich is represents background
+    fun getTableIconById(id: Int) = pins.find { p -> p.id == id }?.tableImage ?: pinBackground
 }
