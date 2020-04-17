@@ -14,7 +14,8 @@ object PinStore {
     PINK("#ff00ff"),
     YELLOW("#ffff00")*/
 
-    val pinBackground : Bitmap = Painter.circle()
+    private val pinBackground : Bitmap = Painter.circle()
+    val guessIcon = Painter.circle(text = "?")
 
     //6pcs pins
     val pins = List(6){
@@ -35,6 +36,8 @@ object PinStore {
             )
         )
     }
+    val size
+        get() = pins.size
     fun getChooserIconById(id: Int) = pins.find{ p -> p.id == id }!!.chooserImage
     //if not found element with given id, that means the given id is 0 wich is represents background
     fun getTableIconById(id: Int) = pins.find { p -> p.id == id }?.tableImage ?: pinBackground

@@ -12,6 +12,7 @@
         android:id="@+id/rvChooser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +24,7 @@
         android:id="@+id/rvGuess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:overScrollMode="never"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +33,7 @@
         android:id="@+id/rvTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:alwaysDrawnWithCache="false"
         android:overScrollMode="never"
         app:layout_constraintStart_toStartOf="@+id/rvGuess"
