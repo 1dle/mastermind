@@ -85,7 +85,6 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
 
                 if(gameTable.currentRowFull()){
                     rvResult.adapter!!.notifyItemChanged(gameTable.row)
-                    Log.d("asd", gameTable.row.toString())
                 }
             }
         }
@@ -95,6 +94,7 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
         //check current rows and move to next
         if( gameTable.results[position].state == RowResultState.READY ){
             gameTable.rateCurrentRow()
+            Log.d("asd","b: "+ gameTable.results[position].black.toString() + " w:"+ gameTable.results[position].white.toString() )
             rvResult.adapter!!.notifyItemChanged(gameTable.row-1) //-1 cause in rate method already increased row
         }
     }

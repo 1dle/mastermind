@@ -49,25 +49,41 @@ class GameTable{
         var blacks = 0;
         var whites = 0;
 
-        val dontCheck = mutableListOf<Int>()
-
+        val dontCheckJ = mutableListOf<Int>()
+        val dontCheckI = mutableListOf<Int>()
+        //first check for blacks
         for( i in row*MAX_COL..row*MAX_COL+3) {
             for( j in toGuess.indices){
                 //ha már van egy találat azzal az elemmel akkor mégegyszer nem nézem
-                if(!dontCheck.contains(j)){
+                if(!dontCheckJ.contains(j)){
                     //ha jó helyen van és jó szín
-                    if(i == j && _table.get(i) == j) {
-                        dontCheck.add(j)
+                    if((i%MAX_COL) == j && _table.get(i) == toGuess.get(j)) {
+                        dontCheckJ.add(j)
+                        dontCheckI.add(i)
                         blacks++
-                        break
-                    }else if(_table.get(i) == j){
-                        dontCheck.add(j)
-                        whites++
                         break
                     }
                 }
 
             }
+        }
+        //now check for whites
+        for( i in row*MAX_COL..row*MAX_COL+3) {
+            if(!dontCheckI.contains(i)){
+                for( j in toGuess.indices){
+                    //ha már van egy találat azzal az elemmel akkor mégegyszer nem nézem
+                    if(!dontCheckJ.contains(j)){
+                        //ha jó helyen van és jó szín
+                        if((i%MAX_COL) != j && _table.get(i) == toGuess.get(j)) {
+                            dontCheckJ.add(j)
+                            whites++
+                            break
+                        }
+                    }
+
+                }
+            }
+
         }
         //add results to rowRest
         results[row].black = blacks
