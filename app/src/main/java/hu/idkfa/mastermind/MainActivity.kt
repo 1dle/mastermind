@@ -2,6 +2,7 @@ package hu.idkfa.mastermind
 
 import android.graphics.Point
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,6 +12,7 @@ import hu.idkfa.mastermind.adapter.FunctionMode
 import hu.idkfa.mastermind.adapter.PinHolderAdapter
 import hu.idkfa.mastermind.adapter.RowResultsAdapter
 import hu.idkfa.mastermind.model.GameTable
+import hu.idkfa.mastermind.model.RowResultState
 import hu.idkfa.mastermind.repositories.PinStore
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -79,12 +81,21 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
             //add that id to gametable
 
             gameTable.add(position+1).also{
-                rvTable.adapter!!.notifyItemChanged(it)
+                if(it >= 0) rvTable.adapter!!.notifyItemChanged(it)
+
+                if(gameTable.currentRowFull()){
+                    rvResult.adapter!!.notifyItemChanged(gameTable.row)
+                    Log.d("asd", gameTable.row.toString())
+                }
             }
         }
     }
 
     override fun onResultClick(position: Int) {
-        TODO("Not yet implemented")
+        //check current rows and move to next
+        if( gameTable.results[position].state == RowResultState.READY ){
+            gameTable.rateCurrentRow()
+            rvResult.adapter!!.notifyItemChanged(gameTable.row-1) //-1 cause in rate method already increased row
+        }
     }
 }

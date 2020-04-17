@@ -1,5 +1,6 @@
 package hu.idkfa.mastermind.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hu.idkfa.mastermind.repositories.PinStore
@@ -8,7 +9,7 @@ import kotlin.random.Random
 class GameTable{
 
     //current position of cursor(row, column)
-    private var row = 0
+    var row = 0
     private var column = 0
     //size of game table
     private val MAX_ROW = 8
@@ -32,9 +33,70 @@ class GameTable{
     fun reset(){
         row = 0
         column = 0
+        resetTable()
     }
+    fun currentRowFull(): Boolean{
+        for( i in row*MAX_COL..row*MAX_COL+3){
+            if(_table[i] == 0){
+                results[row].state = RowResultState.PRE
+                return false
+            }
+        }
+        results[row].state = RowResultState.READY
+        return true
+    }
+    fun rateCurrentRow(){
+        var blacks = 0;
+        var whites = 0;
+
+        val dontCheck = mutableListOf<Int>()
+
+        for( i in row*MAX_COL..row*MAX_COL+3) {
+            for( j in toGuess.indices){
+                //ha már van egy találat azzal az elemmel akkor mégegyszer nem nézem
+                if(!dontCheck.contains(j)){
+                    //ha jó helyen van és jó szín
+                    if(i == j && _table.get(i) == j) {
+                        dontCheck.add(j)
+                        blacks++
+                        break
+                    }else if(_table.get(i) == j){
+                        dontCheck.add(j)
+                        whites++
+                        break
+                    }
+                }
+
+            }
+        }
+        //add results to rowRest
+        results[row].black = blacks
+        results[row].white = whites
+        //change state
+        results[row].state = RowResultState.POST
+        //incrase row
+        row++
+        column = 0
+    }
+
     fun add(pinId: Int): Int{
-        _table.set(row*MAX_COL+column, pinId)
-        return row*MAX_COL+column++
+        if (row*MAX_COL+column < MAX_ROW*MAX_COL){
+            //if table is not full
+            if(column != MAX_COL){
+                _table.set(row*MAX_COL+column, pinId)
+                return row*MAX_COL+column++
+            }else{
+                //if in the last column show checkmark
+
+                return -2 //wait for press result
+            }
+
+        }else{
+            return -1 //table is full
+            //probably game over
+        }
+
+
+
     }
 }

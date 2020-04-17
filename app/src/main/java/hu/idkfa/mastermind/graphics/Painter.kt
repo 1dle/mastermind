@@ -60,6 +60,56 @@ object Painter {
             style = Paint.Style.FILL
         },"✓", resultBG.width/2f, resultBG.height/2f)
 
+    fun drawResult(blacks : Int, whites: Int): Bitmap {
+        val unit = Constants.ITEMSIZE_MAIN
+        val background = resultBG.copy(resultBG.config, resultBG.isMutable)
+        val paint = Paint()
+
+        paint.style = Paint.Style.FILL
+        paint.color = Color.parseColor(Kolor.BGDARKER.colorCode)
+        paint.flags = Paint.ANTI_ALIAS_FLAG
+        paint.strokeWidth = 5f
+
+        val canvas = Canvas(background)
+        // két keresztező volnal rajzoolása drawLine (float startX, float startY, float stopX, float stopY, Paint paint)
+        //vizszintes
+        canvas.drawLine(unit/2f, 5f, unit/2f, unit-5f, paint)
+        //fuggoleges
+        canvas.drawLine(5f, unit/2f, unit-5f, unit/2f, paint)
+
+        //karikák kirajzolása
+        val rad = unit/8f
+        paint.strokeWidth = 0f
+
+        var array = mutableListOf<Int>()
+        repeat(blacks){array.add(2)}
+        repeat(whites){array.add(1)}
+
+        for(i in 0 until array.size){
+            if(array[i] != 0){
+                if(array[i] == 2){
+                    paint.color = Color.BLACK
+                }else if(array[i] == 1){
+                    paint.color = Color.WHITE
+                }
+                var cx = unit/4f
+                var cy = unit/4f
+                if(i==3){
+                    cx = 3f*unit/4f
+                    cy = cx
+                }else if(i==2){
+                    cy = 3f*unit/4f
+                }else if(i == 1){
+                    cx = 3f*unit/4f
+                }
+                canvas.drawCircle(cx,cy,rad,paint)
+            }
+
+
+        }
+        return background
+    }
+
 
 }
 
@@ -75,4 +125,11 @@ private fun Canvas.centerText(paint: Paint, text: String, cx: Float, cy:Float) {
 private fun Bitmap.addCenterText(paint: Paint, text: String, cx: Float, cy:Float): Bitmap = this.apply{
     val canvas = Canvas(this)
     canvas.centerText(paint, text, cx, cy)
+}
+fun Bitmap.addCenterText(text: String): Bitmap{
+    return this.copy(this.config, this.isMutable).addCenterText(Paint().apply {
+        color = Color.WHITE
+        textSize = Painter.resultBG.width.toFloat()
+        style = Paint.Style.FILL
+    },text, this.width/2f, this.height/2f)
 }

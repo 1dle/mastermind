@@ -43,7 +43,7 @@ class RowResultsAdapter(private var resultList: List<RowResult>, private var onR
             when(resultList.get(position).state){
                 RowResultState.PRE -> Painter.resultBG
                 RowResultState.READY -> Painter.resultChecked
-                RowResultState.POST -> Painter.resultBG //todo: change to image generator
+                RowResultState.POST -> Painter.drawResult(resultList.get(position).black, resultList.get(position).white)
             }
         )
         holder.view.setOnClickListener{

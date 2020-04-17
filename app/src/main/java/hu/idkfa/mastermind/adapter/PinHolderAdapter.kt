@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.idkfa.mastermind.R
+import hu.idkfa.mastermind.graphics.addCenterText
 import hu.idkfa.mastermind.repositories.PinStore
 import kotlinx.android.synthetic.main.item_chooser.view.*
 
@@ -48,7 +49,7 @@ class PinHolderAdapter(private var linearDataSet: List<Int>,
             when(actAs){
                 FunctionMode.MAIN_TABLE -> PinStore.getTableIconById(linearDataSet.get(position))
                 FunctionMode.CHOOSER -> PinStore.getChooserIconById(linearDataSet.get(position))
-                FunctionMode.TOGUESS -> PinStore.guessIcon
+                FunctionMode.TOGUESS -> PinStore.getTableIconById(linearDataSet.get(position)).addCenterText("?")
             }
         )
         holder.view.setOnClickListener{
