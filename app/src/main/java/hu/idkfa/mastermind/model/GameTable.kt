@@ -19,21 +19,34 @@ class GameTable{
     // _table stores IDs of pins
     private val _table = MutableList(MAX_ROW * MAX_COL){0}
     // numbers needs to be guessed
-    val toGuess =  List(MAX_COL){
+    var toGuess =  MutableList(MAX_COL){
         Random.nextInt(1, PinStore.size)
     }
     val results = List(MAX_ROW){ RowResult() }
 
+    //reset full table, delete every element
     private fun resetTable(){//set each element of table to null
         for(i in _table.indices){
             _table[i] = 0
         }
     }
 
+    //reset all RowResult objects
+    private fun resetRowResults(){
+        results.forEach { it.reset() }
+    }
+
     var mainTable: List<Int> = _table
+
+    //reset full game
     fun reset(){
         row = 0
         resetTable()
+        resetRowResults()
+        //generate new randoms
+        for(i in toGuess.indices){
+            toGuess[i] = Random.nextInt(1, PinStore.size)
+        }
     }
 
     /*

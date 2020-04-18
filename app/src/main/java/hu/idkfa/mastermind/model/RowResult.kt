@@ -9,4 +9,10 @@ enum class RowResultState{
 }
 data class RowResult(var white: Int = 0, //correct color
                      var black: Int = 0, //correct color and correct position
-                     var state: RowResultState = RowResultState.PRE)
+                     var state: RowResultState = RowResultState.PRE){
+    fun reset(){
+        white = 0
+        black = 0
+        state = RowResultState.PRE
+    }
+}

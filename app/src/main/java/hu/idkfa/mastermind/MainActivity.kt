@@ -100,6 +100,11 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
         }
 
     }
+    private fun refreshAdapters(){
+        rvTable.adapter!!.notifyDataSetChanged()
+        rvGuess.adapter!!.notifyDataSetChanged()
+        rvResult.adapter!!.notifyDataSetChanged()
+    }
 
     override fun onResultClick(position: Int) {
         //check current rows and move to next
@@ -113,6 +118,11 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
                     message(text = "You guessed the 4 colors!")
                     positiveButton(text = "Play another game"){
                         //reset game and dismiss dialog
+                        gameTable.reset()
+                        //after reset refresh ui elements
+                        refreshAdapters()
+                        //hide dialog
+                        dismiss()
                     }
                     negativeButton (text = "Quit") {
                         //quit app and dismiss dialog
@@ -128,8 +138,11 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
                     }
                     }")
                     positiveButton(text = "Play another game"){
-
                         //reset game and dismiss dialog
+                        gameTable.reset()
+                        //after reset refresh ui elements
+                        refreshAdapters()
+                        //hide dialog
                         dismiss()
                     }
                     negativeButton (text = "Quit") {
