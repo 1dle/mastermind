@@ -7,6 +7,9 @@ object Constants {
     var ITEMSIZE_MAIN = 0; //for elements in rvChooser
     var ITEMSIZE_CHOOSER = 0; //for elemtns in rvTable (GameTable)
 
+    val GAME_OVER = -1
+    val GAME_WON  = -2
+
     fun inititemSizes(windowWidth: Int, windowHeight: Int){
         W_WIDTH = windowWidth
         W_HEIGHT = windowHeight

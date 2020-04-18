@@ -3,6 +3,7 @@ package hu.idkfa.mastermind.model
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import hu.idkfa.mastermind.Constants
 import hu.idkfa.mastermind.repositories.PinStore
 import kotlin.random.Random
 
@@ -48,16 +49,9 @@ class GameTable{
             if(!currentRowFull() && nextFree!=null){
                 _table.set(nextFree, pinId)
                 return nextFree
-            }else{
-                //if in the last column show checkmark
-
-                return -2 //wait for press result
             }
-
-        }else{
-            return -1 //table is full
-            //probably game over
         }
+        return -1
 
 
 
@@ -84,7 +78,7 @@ class GameTable{
     and the RowResult.black and white properties set to the result of the check
     after it, state of row is changed and we move the cursor to the next row
      */
-    fun rateCurrentRow(){
+    fun rateCurrentRow(): Int{
         var blacks = 0;
         var whites = 0;
 
@@ -131,6 +125,14 @@ class GameTable{
         results[row].state = RowResultState.POST
         //move the cursor to the next row
         row++
+        if(blacks == 4){
+            return Constants.GAME_WON
+        }
+        if(row >= MAX_ROW){
+            return Constants.GAME_OVER
+        }
+        return 0
+
     }
 
     /**

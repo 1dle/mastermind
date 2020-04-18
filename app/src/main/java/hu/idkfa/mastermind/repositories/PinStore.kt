@@ -5,6 +5,7 @@ import hu.idkfa.mastermind.Constants
 import hu.idkfa.mastermind.graphics.Painter
 import hu.idkfa.mastermind.model.Kolor
 import hu.idkfa.mastermind.model.Pin
+import java.util.*
 
 object PinStore {
     /*RED("#ff0000"),
@@ -18,6 +19,9 @@ object PinStore {
     val guessIcon = Painter.circle(text = "?")
 
     //6pcs pins
+    /**
+     * Generate all of the pins that are used
+     */
     val pins = List(6){
         //+1 because IDs should start from index 1, because 0 represents empty in gameTable isntead of NULL
         Pin(it+1,
@@ -42,4 +46,9 @@ object PinStore {
     fun getChooserIconById(id: Int) = pins.find{ p -> p.id == id }!!.chooserImage
     //if not found element with given id, that means the given id is 0 wich is represents background
     fun getTableIconById(id: Int) = pins.find { p -> p.id == id }?.tableImage ?: pinBackground
+
+    fun getColorNameById(id: Int) = enumValues<Kolor>().get(pins.find { p -> p.id == id }!!.id+1)
+        .toString().toLowerCase(Locale.ROOT).apply {
+            this[0].toUpperCase()
+        }
 }

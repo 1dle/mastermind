@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
 import hu.idkfa.mastermind.adapter.FunctionMode
 import hu.idkfa.mastermind.adapter.PinHolderAdapter
 import hu.idkfa.mastermind.adapter.RowResultsAdapter
@@ -94,8 +95,6 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
             if(gameTable.freePosition(position)){
                 rvTable.adapter!!.notifyItemChanged(position)
                 rvResult.adapter!!.notifyItemChanged(gameTable.row)
-
-
             }
 
         }
@@ -105,9 +104,41 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
     override fun onResultClick(position: Int) {
         //check current rows and move to next
         if( gameTable.results[position].state == RowResultState.READY ){
-            gameTable.rateCurrentRow()
+            val response = gameTable.rateCurrentRow()
             //Log.d("asd","b: "+ gameTable.results[position].black.toString() + " w:"+ gameTable.results[position].white.toString() )
             rvResult.adapter!!.notifyItemChanged(gameTable.row-1) //-1 cause in rate method already increased row
+            if(response == Constants.GAME_WON){
+                MaterialDialog(this).show {
+                    title(text = "Congratulations!")
+                    message(text = "You guessed the 4 colors!")
+                    positiveButton(text = "Play another game"){
+                        //reset game and dismiss dialog
+                    }
+                    negativeButton (text = "Quit") {
+                        //quit app and dismiss dialog
+                        dismiss()
+                        finish()
+                    }
+                }
+            }else if(response == Constants.GAME_OVER){
+                MaterialDialog(this).show {
+                    title(text = "Game over!")
+                    message(text = "Sorry u lost. These were the colors:\n${gameTable.toGuess.joinToString(", "){
+                        PinStore.getColorNameById(it)
+                    }
+                    }")
+                    positiveButton(text = "Play another game"){
+
+                        //reset game and dismiss dialog
+                        dismiss()
+                    }
+                    negativeButton (text = "Quit") {
+                        //quit app and dismiss dialog
+                        dismiss()
+                        finish()
+                    }
+                }
+            }
         }
     }
 }
