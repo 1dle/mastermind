@@ -48,7 +48,5 @@ object PinStore {
     fun getTableIconById(id: Int) = pins.find { p -> p.id == id }?.tableImage ?: pinBackground
 
     fun getColorNameById(id: Int) = enumValues<Kolor>().get(pins.find { p -> p.id == id }!!.id+1)
-        .toString().toLowerCase(Locale.ROOT).apply {
-            this[0].toUpperCase()
-        }
+        .toString().toLowerCase(Locale.ROOT)
 }

@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hu.idkfa.mastermind.Constants
+import hu.idkfa.mastermind.Constants.MAX_COL
+import hu.idkfa.mastermind.Constants.MAX_ROW
 import hu.idkfa.mastermind.repositories.PinStore
 import kotlin.random.Random
 
@@ -12,9 +14,6 @@ class GameTable{
     //current position of cursor(row, column)
     var row = 0
     //private var column = 0
-    //size of game table
-    private val MAX_ROW = 8
-    private val MAX_COL = 4
 
     // _table stores IDs of pins
     private val _table = MutableList(MAX_ROW * MAX_COL){0}
@@ -174,6 +173,4 @@ class GameTable{
         }
 
     }
-
-
 }

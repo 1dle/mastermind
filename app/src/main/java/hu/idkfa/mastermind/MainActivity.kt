@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = RowResultsAdapter(gameTable.results, this@MainActivity)
         }
+        Log.d("TO_GUESS", gameTable.toGuess.joinToString(", "){ PinStore.getColorNameById(it) })
 
     }
 
@@ -133,10 +134,7 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
             }else if(response == Constants.GAME_OVER){
                 MaterialDialog(this).show {
                     title(text = "Game over!")
-                    message(text = "Sorry u lost. These were the colors:\n${gameTable.toGuess.joinToString(", "){
-                        PinStore.getColorNameById(it)
-                    }
-                    }")
+                    message(text = "Sorry u lost. These were the colors:\n${gameTable.toGuess.joinToString(", "){ PinStore.getColorNameById(it) }}")
                     positiveButton(text = "Play another game"){
                         //reset game and dismiss dialog
                         gameTable.reset()

@@ -49,7 +49,7 @@ class PinHolderAdapter(private var linearDataSet: List<Int>,
             when(actAs){
                 FunctionMode.MAIN_TABLE -> PinStore.getTableIconById(linearDataSet.get(position))
                 FunctionMode.CHOOSER -> PinStore.getChooserIconById(linearDataSet.get(position))
-                FunctionMode.TOGUESS -> PinStore.getTableIconById(linearDataSet.get(position)).addCenterText("?")
+                FunctionMode.TOGUESS -> PinStore.guessIcon /*PinStore.getTableIconById(linearDataSet.get(position)).addCenterText("?")*/
             }
         )
         holder.view.setOnClickListener{
