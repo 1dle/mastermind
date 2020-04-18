@@ -35,6 +35,37 @@ class GameTable{
         column = 0
         resetTable()
     }
+
+    /*
+    This function add an element to the table and
+    returns the index thats need to be updated in the RecyclerView
+     */
+    fun add(pinId: Int): Int{
+        //if table is not full
+        if (row*MAX_COL+column < MAX_ROW*MAX_COL){
+            //the current row is not full
+            if(column != MAX_COL){
+                _table.set(row*MAX_COL+column, pinId)
+                return row*MAX_COL+column++
+            }else{
+                //if in the last column show checkmark
+
+                return -2 //wait for press result
+            }
+
+        }else{
+            return -1 //table is full
+            //probably game over
+        }
+
+
+
+    }
+
+    /*
+    This function checks if the current row is full
+    and if it is, then change the state of the current RowResult
+     */
     fun currentRowFull(): Boolean{
         for( i in row*MAX_COL..row*MAX_COL+3){
             if(_table[i] == 0){
@@ -45,6 +76,13 @@ class GameTable{
         results[row].state = RowResultState.READY
         return true
     }
+
+    /*
+    rate the current row (current row = row)
+    this function runs when user tap on current RowResult
+    and the RowResult.black and white properties set to the result of the check
+    after it, state of row is changed and we move the cursor to the next row
+     */
     fun rateCurrentRow(){
         var blacks = 0;
         var whites = 0;
@@ -90,29 +128,10 @@ class GameTable{
         results[row].white = whites
         //change state
         results[row].state = RowResultState.POST
-        //incrase row
+        //move the cursor to the next row
         row++
         column = 0
     }
 
-    fun add(pinId: Int): Int{
-        if (row*MAX_COL+column < MAX_ROW*MAX_COL){
-            //if table is not full
-            if(column != MAX_COL){
-                _table.set(row*MAX_COL+column, pinId)
-                return row*MAX_COL+column++
-            }else{
-                //if in the last column show checkmark
 
-                return -2 //wait for press result
-            }
-
-        }else{
-            return -1 //table is full
-            //probably game over
-        }
-
-
-
-    }
 }

@@ -6,6 +6,14 @@ import hu.idkfa.mastermind.model.Kolor
 
 object Painter {
 
+    /*generate a bitmap whit a circle on it
+    * in the function parameters you can give the
+    *   size of the circle
+    *   has border
+    *   color
+    *   a text that shows the top of the opject (typically one char)
+    *   and the margin (the gap between the canvas side and the circle)
+    * */
     fun circle(
         size: Int = Constants.ITEMSIZE_MAIN,
         border: Boolean = false,
@@ -32,14 +40,21 @@ object Painter {
             canvas.drawCircle(size/2f+margin,size/2f+margin,radius,paint)
         }
         if (text!=null){
-            paint.textSize = size.toFloat()
-            paint.style = Paint.Style.FILL
-            paint.color = Color.WHITE
+            paint.apply {
+                textSize = size.toFloat()
+                style = Paint.Style.FILL
+                this.color = Color.WHITE
+            }
             canvas.centerText(paint, text,size/2f,size/2f)
         }
         return bg
     }
-
+    /*
+    * This is a bitmap that shows the end of the every row
+    * when the RowResultState is PRE
+    * a ractangle whit rounded edges and
+    * just a bit lighter color than the background
+    * */
     val resultBG = Bitmap.createBitmap(Constants.ITEMSIZE_MAIN,Constants.ITEMSIZE_MAIN, Bitmap.Config.ARGB_8888 ).also {
         Canvas(it).apply {
             drawRoundRect(
@@ -53,37 +68,62 @@ object Painter {
             )
         }
     }
-    //copy case we dont wanna draw on resultBG
+
+    /*
+    * Same as the resultBG but with a green checkmark on it and
+    * shows when the state of row is set to READY
+    * */
     val resultChecked = resultBG.copy(resultBG.config, resultBG.isMutable).addCenterText(Paint().apply {
             color = Color.GREEN
             textSize = resultBG.width.toFloat()
             style = Paint.Style.FILL
         },"✓", resultBG.width/2f, resultBG.height/2f)
 
+
+    /*
+    * this image is the resultBG but have two lines on it
+    * a horizontal and a vertical line which which intersects in the middle of the rectangle
+    * drawResult function draws on this bitmap
+     */
+    val postResultBG = resultBG.copy(resultBG.config, resultBG.isMutable).apply{
+
+        val unit = Constants.ITEMSIZE_MAIN
+        val paint = Paint().apply{
+            style = Paint.Style.FILL
+            color = Color.parseColor(Kolor.BGDARKER.colorCode)
+            flags = Paint.ANTI_ALIAS_FLAG
+            strokeWidth = 5f
+        }
+        Canvas(this).apply {
+            //horizontal
+            drawLine(unit/2f, 5f, unit/2f, unit-5f, paint)
+            //vertical
+            drawLine(5f, unit/2f, unit-5f, unit/2f, paint)
+        }
+    }
+    /*
+    * and this is a function that generates the image of the result
+    * from the RowResult object two properties (black, white)
+    * This function draws on top of the resultBG and add two lines
+     */
     fun drawResult(blacks : Int, whites: Int): Bitmap {
         val unit = Constants.ITEMSIZE_MAIN
-        val background = resultBG.copy(resultBG.config, resultBG.isMutable)
-        val paint = Paint()
-
-        paint.style = Paint.Style.FILL
-        paint.color = Color.parseColor(Kolor.BGDARKER.colorCode)
-        paint.flags = Paint.ANTI_ALIAS_FLAG
-        paint.strokeWidth = 5f
-
+        val background = postResultBG.copy(resultBG.config, resultBG.isMutable)
         val canvas = Canvas(background)
-        // két keresztező volnal rajzoolása drawLine (float startX, float startY, float stopX, float stopY, Paint paint)
-        //vizszintes
-        canvas.drawLine(unit/2f, 5f, unit/2f, unit-5f, paint)
-        //fuggoleges
-        canvas.drawLine(5f, unit/2f, unit-5f, unit/2f, paint)
-
-        //karikák kirajzolása
-        val rad = unit/8f
-        paint.strokeWidth = 0f
-
-        var array = mutableListOf<Int>()
+        val paint = Paint().apply{
+            style = Paint.Style.FILL
+            color = Color.parseColor(Kolor.BGDARKER.colorCode)
+            flags = Paint.ANTI_ALIAS_FLAG
+            strokeWidth = 5f
+        }
+        //put black and white walues into arrays (black represents 2, white 1)
+        val array = mutableListOf<Int>()
         repeat(blacks){array.add(2)}
         repeat(whites){array.add(1)}
+
+        //drawing white circles
+        val rad = unit/8f
+        paint.strokeWidth = 0f
 
         for(i in 0 until array.size){
             if(array[i] != 0){
@@ -109,10 +149,10 @@ object Painter {
         }
         return background
     }
-
-
 }
-
+/**
+ * This function draws a text that aligned to the center of the canvas
+ */
 private fun Canvas.centerText(paint: Paint, text: String, cx: Float, cy:Float) {
     val r = Rect();
     this.getClipBounds(r)
@@ -122,10 +162,17 @@ private fun Canvas.centerText(paint: Paint, text: String, cx: Float, cy:Float) {
     val y = cy + r.height() / 2f - r.bottom
     this.drawText(text, x, y, paint)
 }
+/**
+ * This function draws a text that aligned to the center of the bitmap
+ */
 private fun Bitmap.addCenterText(paint: Paint, text: String, cx: Float, cy:Float): Bitmap = this.apply{
     val canvas = Canvas(this)
     canvas.centerText(paint, text, cx, cy)
 }
+/**
+ * This function draws a text that aligned to the center of the canvas
+ * you can choose only the text
+ */
 fun Bitmap.addCenterText(text: String): Bitmap{
     return this.copy(this.config, this.isMutable).addCenterText(Paint().apply {
         color = Color.WHITE

@@ -81,10 +81,10 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
             //add that id to gametable
 
             gameTable.add(position+1).also{
-                if(it >= 0) rvTable.adapter!!.notifyItemChanged(it)
-
-                if(gameTable.currentRowFull()){
-                    rvResult.adapter!!.notifyItemChanged(gameTable.row)
+                if(it >= 0){ rvTable.adapter!!.notifyItemChanged(it)
+                    if(gameTable.currentRowFull()){
+                        rvResult.adapter!!.notifyItemChanged(gameTable.row)
+                    }
                 }
             }
         }
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
         //check current rows and move to next
         if( gameTable.results[position].state == RowResultState.READY ){
             gameTable.rateCurrentRow()
-            Log.d("asd","b: "+ gameTable.results[position].black.toString() + " w:"+ gameTable.results[position].white.toString() )
+            //Log.d("asd","b: "+ gameTable.results[position].black.toString() + " w:"+ gameTable.results[position].white.toString() )
             rvResult.adapter!!.notifyItemChanged(gameTable.row-1) //-1 cause in rate method already increased row
         }
     }
