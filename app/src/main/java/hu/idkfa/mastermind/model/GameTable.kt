@@ -10,7 +10,7 @@ class GameTable{
 
     //current position of cursor(row, column)
     var row = 0
-    private var column = 0
+    //private var column = 0
     //size of game table
     private val MAX_ROW = 8
     private val MAX_COL = 4
@@ -32,7 +32,6 @@ class GameTable{
     var mainTable: List<Int> = _table
     fun reset(){
         row = 0
-        column = 0
         resetTable()
     }
 
@@ -42,11 +41,13 @@ class GameTable{
      */
     fun add(pinId: Int): Int{
         //if table is not full
-        if (row*MAX_COL+column < MAX_ROW*MAX_COL){
+        if (row != MAX_ROW && !currentRowFull()){
             //the current row is not full
-            if(column != MAX_COL){
-                _table.set(row*MAX_COL+column, pinId)
-                return row*MAX_COL+column++
+            //find the next free column
+            val nextFree = nextFreePos()
+            if(!currentRowFull() && nextFree!=null){
+                _table.set(nextFree, pinId)
+                return nextFree
             }else{
                 //if in the last column show checkmark
 
@@ -130,7 +131,33 @@ class GameTable{
         results[row].state = RowResultState.POST
         //move the cursor to the next row
         row++
-        column = 0
+    }
+
+    /**
+     * Next functions is about removing from gametable
+     * and adding again
+     */
+
+    /**
+     * Find the next free position in the row
+     * and returns the position of it in the list not in the current row
+     * Only search in the current row
+     */
+    fun nextFreePos() = (row*MAX_COL..row*MAX_COL+3).find { _table.get(it) == 0 }
+
+    /**
+     * Free up the chosen position (remove pin)
+     */
+    fun freePosition(position: Int): Boolean{
+        if((row*MAX_COL..row*MAX_COL+3).contains(position)){
+            _table[position] = 0
+            //set the state of row to pre
+            results[row].state = RowResultState.PRE
+            return true
+        }else{
+            return false
+        }
+
     }
 
 

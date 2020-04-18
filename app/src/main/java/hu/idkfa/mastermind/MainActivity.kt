@@ -73,9 +73,7 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
     }
 
     override fun onTablePinClick(position: Int, mode: FunctionMode) {
-        //delete selected item, only if in the current row and is not already empty
         //the adapter is multifunctional so we need to check wich table we clicked
-        //Toast.makeText(this,gameTable.asList().get(position).toString(), Toast.LENGTH_SHORT).show()
         if(mode == FunctionMode.CHOOSER){
             //if i click on one of elements of chooser
             //add that id to gametable
@@ -87,7 +85,21 @@ class MainActivity : AppCompatActivity(), PinHolderAdapter.OnPinClickListener, R
                     }
                 }
             }
+
+        }else if(mode == FunctionMode.MAIN_TABLE){
+            /**
+             * delete selected item, only if in the current row and is not already empty
+             * if returns with true, the row resultstate is need to be changed
+             */
+            if(gameTable.freePosition(position)){
+                rvTable.adapter!!.notifyItemChanged(position)
+                rvResult.adapter!!.notifyItemChanged(gameTable.row)
+
+
+            }
+
         }
+
     }
 
     override fun onResultClick(position: Int) {
